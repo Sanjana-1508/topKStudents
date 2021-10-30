@@ -1,0 +1,140 @@
+import java.util.*;
+public class Topper
+{
+    int g_unsortedArray[];
+    int g_sortedArray[];
+    int g_uniqueElementsArray[];
+    int g_topKElementsArray[];
+    int num_Student;
+    ArrayList<Integer> g_resultList = new ArrayList<Integer>();
+
+    //define methods or functions
+
+    public int[] acceptMarksInput()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the number of students: ");
+        num_Student = sc.nextInt();
+        int l_unsortedArray[] = new int[num_Student];
+        System.out.println("Enter the marks of each student: ");
+        for(int i = 0; i<num_Student; i++)
+        {
+            l_unsortedArray[i] = sc.nextInt();//entering marks into array 
+        }
+        return l_unsortedArray;
+    }
+
+    public int[] sortArray(int[] unsortedArray)
+    {
+        //takes an unsortedArray and sorts it and returns the sortedArray
+        System.out.println("entered sortArray() method");
+        int l_sortedArray[] = unsortedArray.clone();
+        Arrays.sort(l_sortedArray);
+        return l_sortedArray;
+    }
+
+    public int[] getUniqueElementsOfAnArray(int[] arrayWithDuplicates)
+    {
+        //takes an array with duplicates and uses Hashmap.keySet().toArray() to return another array of only distinct elements from the original array
+        Map<Integer,Integer> hashMap = new TreeMap<Integer, Integer>();
+        for(int i = 0; i<arrayWithDuplicates.length; i++)
+        {
+            hashMap.put(arrayWithDuplicates[i], i);
+        }
+        System.out.println("treemap is: "+hashMap.keySet());
+                
+        Object objArray[] = hashMap.keySet().toArray();
+        int len=objArray.length;
+        int l_uniqueElementsArray[] = new int[len];
+
+        for(int i=0;i<len;i++)
+        {
+            l_uniqueElementsArray[i]=(int)objArray[i];
+        }
+        return l_uniqueElementsArray;
+    }
+
+    public int[] getTopKElementsOfAnArray(int k, int[] sortedDistinctArray)
+    {
+        // takes 2 parameters, one the sortedArray and second the K elements and returns another array of just the top k elements
+        int topKElements[] = new int[k];
+        int j=0;
+        for(int i = sortedDistinctArray.length-1; i>=sortedDistinctArray.length-k; i--)
+        {
+            topKElements[j] = sortedDistinctArray[i];
+            j++;
+        }
+        return topKElements;
+    }
+
+    public int getArrayIndex(int[] arr, int value)
+    {
+        //returns a specific index position for a given elemnt from the given array
+        int k=0;
+        Topper obj = new Topper();
+        for (int i=0;i<arr.length;i++)
+        {
+            //System.out.println("in getArrayIndex : looking for position of :"+value+" i is :"+i);
+            
+            int trueCount=0;
+            if(arr[i]==value)
+            {
+                k=i;
+                //System.out.println("Match found ! :"+k);
+                obj.g_resultList.add(new Integer(k));
+            }
+        }
+        System.out.println("Resultlist is :"+obj.g_resultList);
+        return k;
+    }
+    public void getSubsetOfOriginalArray(int[] unsortedArray, int[] topKElementsArray)
+    {
+        // function takes 2 arguments - one is original unsorted Array and 
+        // second is topKElements Array and 
+        // slices and returns a subset of originalArray with all occurrences of topKElements
+        for(int i = 0; i<g_topKElementsArray.length; i++)
+        {
+            //System.out.println("trying to find index of :"+g_topKElementsArray[i]);
+            int indexInUnsortedArray = getArrayIndex(unsortedArray, g_topKElementsArray[i]);
+            //System.out.println(" solution index is : "+indexInUnsortedArray);
+            // print the index of the element that you just searched
+        }
+    }
+    public void printArray(int[] anyArray)
+    {
+        for (int i=0; i< anyArray.length;i++)
+        {
+            System.out.print("_"+anyArray[i]);
+        }
+        System.out.println();
+    }
+
+    //define your logic 
+    public static void main()
+    {
+        Topper obj = new Topper();
+        Scanner sc = new Scanner(System.in);        
+        obj.g_unsortedArray=obj.acceptMarksInput();
+        System.out.println("UNSORTED ARRAY");
+        obj.printArray(obj.g_unsortedArray);
+        
+        obj.g_sortedArray=obj.sortArray(obj.g_unsortedArray);
+        System.out.println("SORTED ARRAY");
+        obj.printArray(obj.g_sortedArray);
+        
+        System.out.println("UNIQUE ELEMENTS: ");
+        obj.g_uniqueElementsArray = obj.getUniqueElementsOfAnArray(obj.g_sortedArray);
+        obj.printArray(obj.g_uniqueElementsArray);
+        
+        System.out.println("Enter the top k that you want to see: ");
+        int k = sc.nextInt();
+        obj.g_topKElementsArray = obj.getTopKElementsOfAnArray(k, obj.g_uniqueElementsArray);
+        System.out.println("TOP K ELEMENTS: ");
+        obj.printArray(obj.g_topKElementsArray);
+        
+        System.out.println("Going to find indexes of these K elements in original array");
+        obj.getSubsetOfOriginalArray(obj.g_unsortedArray,obj.g_topKElementsArray);
+        
+        
+    }
+}
